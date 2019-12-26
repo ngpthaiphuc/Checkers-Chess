@@ -5,37 +5,24 @@ import java.awt.event.*;
 public class GUIRunnyThingy extends JPanel{
 	
 	/*
-	 * The 8x8 double array of Square, buttonArr, was used to make a board of buttons. Each square in the double array was initialized
-	 * with its color alternating in checkers pattern. A piece moves by pressing on the piece then the desire location.
-	 * count: Keep track of the clicks in pairs, for each pair of click represents a move
-	 * from: a temporary variable Square that is used to store the first square clicked (the piece that is going to moved)
-	 * moved: determine whether or not a piece has successfully made a legal move
-	 * isFrodoTurn: determine whether or not it is Frodo's or Coco's turn.
+	 * The 8x8 double array of Square, buttonArr, was used to make a board of buttons. Each square in the double array was
+	 * initialize with its color alternating in checkers pattern. A piece moves by pressing on the piece then the desire location. 
 	 */
+	private Square[][] buttonArr;
+	private static int HEIGHT;
+	public static Color CAROLINA_BLUE, BLACK;
+	public boolean isCheckers;
 	
-	private Square[][] buttonArr = new Square[8][8];
-	
-	public int count = 0;
+	public int count;
+	//A temporary variable Square that is used to store the first square clicked (the piece that is going to be moved)
 	public Square from;
-	public boolean moved = false;
-	public boolean isFrodoTurn = true;
-	
-	public boolean isCheckers = true;
-	
-	//The two colors that is used by buttonArr for the alternating color pattern
-	public static final Color carolinaBlue = new Color(75, 156, 211);
-	public static final Color black = new Color(0, 0, 0);
+	public boolean moved;
+	public boolean isFrodoTurn;
 	
 	//The images used for the pieces and for turn buttons (drawn by Joi Zooo)
-	
-	//public ImageIcon coco, frodo, kingFrodo, queenCoco, frodoTurn, cocoTurn;
-	public static ImageIcon coco = new ImageIcon("C:/Users/Le Nguyen/Pictures/Saved Pictures/Coco.png");
-	public static ImageIcon frodo = new ImageIcon("C:/Users/Le Nguyen/Pictures/Saved Pictures/Frodo.png");
-	public static ImageIcon queenCoco = new ImageIcon("C:/Users/Le Nguyen/Pictures/Saved Pictures/QueenCoco.png");
-	public static ImageIcon kingFrodo = new ImageIcon("C:/Users/Le Nguyen/Pictures/Saved Pictures/KingFrodo.png");
-	public static ImageIcon frodoTurn = new ImageIcon("C:/Users/Le Nguyen/Pictures/Saved Pictures/DownArrow.png");
-	public static ImageIcon cocoTurn = new ImageIcon("C:/Users/Le Nguyen/Pictures/Saved Pictures/UpArrow.png");
-	
+	String imageDirectory;
+	public ImageIcon frodo, coco, kingFrodo, queenCoco, frodoTurn, cocoTurn;
+
 	/*
 	 * Setting the layout of the JPanel to an 8x8 grid layout with 1 pixels spacing
 	 * 
@@ -45,10 +32,52 @@ public class GUIRunnyThingy extends JPanel{
 	 * Additionally, it sets the size of all buttons, its background color, and adds actionListener on all carolina blue buttons.
 	 * Furthermore, 2 black buttons also have actionListener for special functions (see the corresponding event)
 	 */
+	
+	/*
+	 * 
+	 */
+	public void setPieces() {
+		if(isCheckers) {
+			frodo = new ImageIcon(imageDirectory + "Frodo.png");
+			coco = new ImageIcon(imageDirectory + "Coco.png");
+			kingFrodo = new ImageIcon(imageDirectory + "KingFrodo.png");
+			queenCoco = new ImageIcon(imageDirectory + "QueenCoco.png");
+		}
+	}
+	
+	//Accessor of the images of the pieces
+	public ImageIcon getImage(String piece) {
+		return piece.equals("frodo") ? frodo : piece.equals("coco") ? coco : piece.equals("king") ? kingFrodo : piece.equals("queen") ? queenCoco : null;
+	}
+	
+	//Constructor
 	public GUIRunnyThingy() {
+		//8x8 board of Square
+		buttonArr = new Square[8][8];
+		//The height of the computer's screen
+		HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50;
+		//The two colors that is used by buttonArr for the alternating color pattern
+		CAROLINA_BLUE = new Color(75, 156, 211);
+		BLACK = new Color(0, 0, 0);
+		//Whether checkers or chess is selected
+		isCheckers = true;
+		
+		//Keep track of the clicks in pairs, for each pair of click represents a move
+		count = 0;
+		//Determine whether or not a piece has successfully made a legal move
+		moved = false;
+		//Determine whether or not it is Frodo's or Coco's turn.
+		isFrodoTurn = true;
+		
+		imageDirectory = "images\\";
+		setPieces();
+		
+		frodoTurn = new ImageIcon(imageDirectory + "DownArrow.png");		
 		Image down = frodoTurn.getImage();
 		Image scaledF = down.getScaledInstance(1000/8, 1000/8, java.awt.Image.SCALE_SMOOTH);
 		frodoTurn = new ImageIcon(scaledF);
+		
+		cocoTurn = new ImageIcon(imageDirectory + "UpArrow.png");
 		Image up = cocoTurn.getImage();
 		Image scaledC = up.getScaledInstance(1000/8, 1000/8, java.awt.Image.SCALE_SMOOTH);
 		cocoTurn = new ImageIcon(scaledC);
@@ -64,14 +93,14 @@ public class GUIRunnyThingy extends JPanel{
 				//buttonArr[r][c] = new JButton();
 				if(((r+1) % 2 == 0 && (c+1) % 2 == 0) || ((r+1) % 2 == 1 && (c+1) % 2 == 1)) {
 					if(r < 3) {
-						buttonArr[r][c] = new Square(new Coco(this, new Position(r, c)), carolinaBlue, new Position(r, c), new JButton(coco));
+						buttonArr[r][c] = new Square(new Coco(this, new Position(r, c)), CAROLINA_BLUE, new Position(r, c), new JButton(coco));
 					} else if(r > 4){
-						buttonArr[r][c] = new Square(new Frodo(this, new Position(r, c)), carolinaBlue, new Position(r, c), new	JButton(frodo));
+						buttonArr[r][c] = new Square(new Frodo(this, new Position(r, c)), CAROLINA_BLUE, new Position(r, c), new JButton(frodo));
 					} else {
-						buttonArr[r][c] = new Square(null, carolinaBlue, new Position(r, c), new JButton());
+						buttonArr[r][c] = new Square(null, CAROLINA_BLUE, new Position(r, c), new JButton());
 					}
 				} else {
-					buttonArr[r][c] = new Square(null, black, new Position(r, c), new JButton());
+					buttonArr[r][c] = new Square(null, BLACK, new Position(r, c), new JButton());
 				}
 				buttonArr[r][c].getButton().setSize(1000/8, 1000/8);	//Set button size to a square
 				
@@ -82,7 +111,7 @@ public class GUIRunnyThingy extends JPanel{
 				
 				add(buttonArr[r][c].getButton());	//Add buttons to the panel
 				
-				if(buttonArr[r][c].getColor().equals(carolinaBlue)){
+				if(buttonArr[r][c].getColor().equals(CAROLINA_BLUE)){
 					buttonArr[r][c].getButton().addActionListener(moveDoggo);
 				}
 			}	
@@ -116,7 +145,7 @@ public class GUIRunnyThingy extends JPanel{
 		JFrame gui = new JFrame();
 		GUIRunnyThingy g = new GUIRunnyThingy();
 		gui.setContentPane(g);
-		gui.setSize(1000, 1000);							//sets the size of the window to a square
+		gui.setSize(HEIGHT, HEIGHT);
 		gui.setLocationRelativeTo(null);					//sets the window position in the middle of the screen
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	//closes the window when the exit buttons is pressed
 		gui.setVisible(true);								//ensures that the window is visible
@@ -220,12 +249,3 @@ public class GUIRunnyThingy extends JPanel{
 		}
 	}
 }
-
-
-
-
-
-
-
-
-

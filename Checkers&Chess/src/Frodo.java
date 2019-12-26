@@ -9,7 +9,7 @@ public class Frodo extends Piece{
 	
 	private GUIRunnyThingy board;
 	public Frodo(GUIRunnyThingy b, Position p) {
-		super(GUIRunnyThingy.frodo, "bottom" , p);
+		super(b.getImage("frodo"), "bottom" , p);
 		board = b;
 	}
 	
@@ -24,8 +24,8 @@ public class Frodo extends Piece{
 	 * the square to be moved to has to be empty, and the square the piece should move from has to contain the piece type of this class.
 	 */
 	public boolean move(Square from, Square to) {
-		if(from.getDoggo() != null && from != to && from.getColor().equals(GUIRunnyThingy.carolinaBlue)&& 
-				to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.carolinaBlue) && 
+		if(from.getDoggo() != null && from != to && from.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE)&& 
+				to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE) && 
 				to.getPosition().getRow() ==  from.getPosition().getRow() - 1 &&
 				Math.abs(to.getPosition().getColumn() - from.getPosition().getColumn()) == 1) {
 			this.setPosition(to.getPosition());
@@ -33,7 +33,7 @@ public class Frodo extends Piece{
 			from.setDoggo(null);
 			int toRow = to.getPosition().getRow();
 			int toCol = to.getPosition().getColumn();
-			board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.frodo);
+			board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("frodo"));
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
@@ -67,7 +67,7 @@ public class Frodo extends Piece{
 			from.setDoggo(null);
 			int toRow = to.getPosition().getRow();
 			int toCol = to.getPosition().getColumn();
-			board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.frodo);
+			board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("frodo"));
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
@@ -89,7 +89,7 @@ public class Frodo extends Piece{
 			from.setDoggo(null);
 			int toRow = to.getPosition().getRow();
 			int toCol = to.getPosition().getColumn();
-			board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.frodo);
+			board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("frodo"));
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);

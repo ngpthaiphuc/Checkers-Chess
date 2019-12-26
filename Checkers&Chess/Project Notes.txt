@@ -1,0 +1,13 @@
+TODO:
+
+Organize this mess of a code (update comments/doc) + fix bugs
+Alternate turn!
+Better GUI -> how to fullscreen in scale with border for info
+Chess stuff (this seems a bit far-fetch rn but we'll get there!)
+
+
+Bugs!
+When jumping over a piece to promote -> fails to promote
+Promoted piece can't capture backwards
+Promoted piece attempting to capture ("jump") turns back into a regular piece
+Probably more big sad :(

@@ -3,13 +3,13 @@ public class KingFrodo extends Frodo {
 	private GUIRunnyThingy board;
 		public KingFrodo(GUIRunnyThingy b, Position p) {
 			super(b, p);
-			setImage(GUIRunnyThingy.kingFrodo);
+			setImage(b.getImage("king"));
 			board = super.getBoard();		
 		}
 		
 		//Same as Frodo but row to move to can be above or below the initial piece position
 		public boolean move(Square from, Square to){
-			if(from.getDoggo() != null && from.getDoggo().getType().equals("kingFrodo") && to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.carolinaBlue) && 
+			if(from.getDoggo() != null && from.getDoggo().getType().equals("kingFrodo") && to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE) && 
 					Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 1 && 
 					Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 1) {
 				this.setPosition(to.getPosition());
@@ -17,7 +17,7 @@ public class KingFrodo extends Frodo {
 				from.setDoggo(null);
 				int toRow = to.getPosition().getRow();
 				int toCol = to.getPosition().getColumn();
-				board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.kingFrodo);
+				board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("king"));
 				int fromRow = from.getPosition().getRow();
 				int fromCol = from.getPosition().getColumn();
 				board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
@@ -30,7 +30,7 @@ public class KingFrodo extends Frodo {
 		public boolean jump(Square from, Square to) {
 			Position startPos = from.getPosition();
 			Position jumpPos = to.getPosition();
-			if(from.getDoggo() != null && from.getDoggo().getType().equals("kingFrodo") && to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.carolinaBlue) 
+			if(from.getDoggo() != null && from.getDoggo().getType().equals("kingFrodo") && to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE) 
 					&& Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 2 && 
 					Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 2 &&
 					(board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow())/2, (startPos.getColumn() + jumpPos.getColumn())/2))
@@ -42,7 +42,7 @@ public class KingFrodo extends Frodo {
 				from.setDoggo(null);
 				int toRow = to.getPosition().getRow();
 				int toCol = to.getPosition().getColumn();
-				board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.kingFrodo);
+				board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("king"));
 				int fromRow = from.getPosition().getRow();
 				int fromCol = from.getPosition().getColumn();
 				board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);

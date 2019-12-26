@@ -1,3 +1,5 @@
+import javax.swing.ImageIcon;
+
 /*
  * A coco is initialized with a CheckersRunnyThing as a parameter rather than assigning a new one so as to avoid errors (each coco needs to 
  * use the same CheckersRunnyThing)
@@ -5,10 +7,10 @@
  * A coco is a piece and requires a position (separate from the square it is assigned to because a piece moves while a suare is stationary)
  */ 
 
-public class Coco extends Piece{
+public class Coco extends Piece {
 	private GUIRunnyThingy board;
 	public Coco(GUIRunnyThingy b, Position p) {
-		super(GUIRunnyThingy.coco, "top" , p);
+		super(b.getImage("coco"), "top" , p);
 		board = b;
 	}
 	
@@ -23,8 +25,8 @@ public class Coco extends Piece{
 	 * the square to be moved to has to be empty, and the square the piece should move from has to contain the piece type of this class.
 	 */
 	public boolean move(Square from, Square to) {
-		if(from.getColor().equals(GUIRunnyThingy.carolinaBlue) && to.getDoggo() == null &&
-				to.getColor().equals(GUIRunnyThingy.carolinaBlue) && to.getPosition().getRow()  ==  from.getPosition().getRow() + 1
+		if(from.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE) && to.getDoggo() == null &&
+				to.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE) && to.getPosition().getRow()  ==  from.getPosition().getRow() + 1
 				&& Math.abs(to.getPosition().getColumn() - from.getPosition().getColumn()) == 1) {
 			/*
 			 * By taking in board as a parameter, coco is able to access buttonArr and alter the buttons that make up the checker board.
@@ -37,7 +39,7 @@ public class Coco extends Piece{
 			from.setDoggo(null);
 			int toRow = to.getPosition().getRow();
 			int toCol = to.getPosition().getColumn();
-			board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.coco);
+			board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("coco"));
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
@@ -71,7 +73,7 @@ public class Coco extends Piece{
 			from.setDoggo(null);
 			int toRow = to.getPosition().getRow();
 			int toCol = to.getPosition().getColumn();
-			board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.coco);
+			board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("coco"));
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
@@ -94,7 +96,7 @@ public class Coco extends Piece{
 			from.setDoggo(null);
 			int toRow = to.getPosition().getRow();
 			int toCol = to.getPosition().getColumn();
-			board.getButtonArr()[toRow][toCol].getButton().setIcon(GUIRunnyThingy.coco);
+			board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage("coco"));
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
