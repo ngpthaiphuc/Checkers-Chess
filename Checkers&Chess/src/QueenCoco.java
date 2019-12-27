@@ -14,7 +14,7 @@ public class QueenCoco extends Coco {
 	
 	//Same as Coco but row to move to can be above or below the initial piece position
 	public boolean move(Square from, Square to){
-		if(from.getDoggo() != null && from.getDoggo().getType().equals("Queen") && to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE) && 
+		if(from.getDoggo() != null && from.getDoggo().getType().equals("Queen") && to.getDoggo() == null && 
 				Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 1 && 
 				Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 1) {
 			this.setPosition(to.getPosition());
@@ -35,11 +35,17 @@ public class QueenCoco extends Coco {
 	public boolean jump(Square from, Square to) {
 		Position startPos = from.getPosition();
 		Position jumpPos = to.getPosition();
-		if(from.getDoggo() != null && from.getDoggo().getType().equals("Queen") && to.getDoggo() == null && to.getColor().equals(GUIRunnyThingy.CAROLINA_BLUE) 
-				&& Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 2 && 
+		//The square being jumped over
+		Square middle = board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow()) /2,
+				(startPos.getColumn() + jumpPos.getColumn()) /2));
+		
+		if(from.getDoggo() != null && to.getDoggo() == null && from.getDoggo().getType().equals("Queen") &&
+				Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 2 && 
 				Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 2 &&
-				(board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow())/2, (startPos.getColumn() + jumpPos.getColumn())/2)).getDoggo().getType().equals("Frodo") 
-				|| (board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow())/2, (startPos.getColumn() + jumpPos.getColumn())/2)).getDoggo().getType().equals("King")))){
+				(middle.getDoggo().getType().equals("Frodo") || (middle.getDoggo().getType().equals("King")))){
+			//Removing the piece being jumped over
+			board.removePiece(middle);
+			//Jumping to the indicated square -> add new doggo to indicated square and delete existing doggo from the first square
 			this.setPosition(to.getPosition());
 			to.setDoggo(from.getDoggo());
 			from.setDoggo(null);
@@ -49,8 +55,6 @@ public class QueenCoco extends Coco {
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
-			board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow())/2, (startPos.getColumn() + jumpPos.getColumn())/2)).getButton().setIcon(null);
-			board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow())/2, (startPos.getColumn() + jumpPos.getColumn())/2)).setDoggo(null);
 			return true;
 		}
 		return false;

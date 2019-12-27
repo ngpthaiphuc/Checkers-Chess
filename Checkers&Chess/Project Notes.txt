@@ -1,18 +1,23 @@
 TODO -> Checkers and Chess (Doggo Edition)
 
 Refining old code:
-Done!		Organize this mess of a code (mostly GUI)
-In progress	Fix current bugs
+Done!		Implement new GUI and reorganize the code to be an easy skeleton for chess implementation
+Done!		Fix current bugs (bug from old code)
 
 New stuff to implement:
 Done!		Better GUI -> how to fullscreen in scale with border for info
-Not done	Alternate turn!
+In Progress	Alternate turn!
 Not done	Chess stuff (this seems a bit far-fetch rn but we'll get there!)
 In Progress	Comments and Documentation
 
-Bugs:
-Not fix		When jumping over a piece to promote -> fail to promote and get stuck
-Not fix		Promoted piece can't capture backwards
-Not fix		Promoted piece attempting to capture ("jump") turns back into a regular piece
 
-Probably more big sad :( -> future bugs will be added below
+Known Bugs:
+
+From old code
+Fixed!		An opponent piece can jump out of turn
+Fixed!		When jumping over a piece to promote -> fail to promote and get stuck
+Fixed!		Promoted piece can't capture backwards
+Fixed!		Promoted piece attempting to capture ("jump") turns back into a regular piece
+Fixed!		Frodo at the bottom-most row can't capture/jump
+
+From new code

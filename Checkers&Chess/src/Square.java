@@ -35,7 +35,6 @@ public class Square{
 	
 	public void setDoggo(Piece p) {
 		doggo = p;
-		
 	}
 	
 	public Piece getDoggo() {
