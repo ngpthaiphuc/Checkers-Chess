@@ -9,13 +9,13 @@ public class Frodo extends Piece{
 	
 	private GUIRunnyThingy board;
 	public Frodo(GUIRunnyThingy b, Position p) {
-		super(b.getImage("frodo"), "bottom" , p);
+		super(b.getImage("frodo"), p);
 		board = b;
 	}
 	
-	
+	//Used to determine the type of piece, useful when determining whether jumping is allowed
 	public String getType() {
-		return "frodo";
+		return "Frodo";
 	}
 	
 	/* 
@@ -55,8 +55,8 @@ public class Frodo extends Piece{
 		 */
 		if(from.getDoggo() != null && to.getDoggo() == null && startPos.getRow() - 2 == jumpPos.getRow() &&  startPos.getColumn() +2 == jumpPos.getColumn() && 
 				board.findSquareWithPos(new Position(startPos.getRow() -1 , startPos.getColumn() +1)).getDoggo() != null &&
-				(board.findSquareWithPos(new Position(startPos.getRow() -1 , startPos.getColumn() +1)).getDoggo().getType().equals("coco") ||
-				board.findSquareWithPos(new Position(startPos.getRow() -1 , startPos.getColumn() +1)).getDoggo().getType().equals("queenCoco"))) {
+				(board.findSquareWithPos(new Position(startPos.getRow() -1 , startPos.getColumn() +1)).getDoggo().getType().equals("Coco") ||
+				board.findSquareWithPos(new Position(startPos.getRow() -1 , startPos.getColumn() +1)).getDoggo().getType().equals("Queen"))) {
 			this.setPosition(to.getPosition());
 			Square middle = board.findSquareWithPos(new Position(startPos.getRow() -1, startPos.getColumn() +1));
 			middle.setDoggo(null);
@@ -77,8 +77,8 @@ public class Frodo extends Piece{
 		
 		if(from.getDoggo() != null && to.getDoggo() == null && startPos.getRow() - 2  == jumpPos.getRow() &&  startPos.getColumn() - 2 == jumpPos.getColumn() && 
 				board.findSquareWithPos(new Position(startPos.getRow() - 1, startPos.getColumn() -1)).getDoggo() != null &&
-				(board.findSquareWithPos(new Position(startPos.getRow() - 1, startPos.getColumn() -1)).getDoggo().getType().equals("coco") || 
-				board.findSquareWithPos(new Position(startPos.getRow() - 1, startPos.getColumn() -1)).getDoggo().getType().equals("queenCoco"))) {
+				(board.findSquareWithPos(new Position(startPos.getRow() - 1, startPos.getColumn() -1)).getDoggo().getType().equals("Coco") || 
+				board.findSquareWithPos(new Position(startPos.getRow() - 1, startPos.getColumn() -1)).getDoggo().getType().equals("Queen"))) {
 			this.setPosition(to.getPosition());
 			Square middle = board.findSquareWithPos(new Position(startPos.getRow() -1, startPos.getColumn() -1));
 			middle.setDoggo(null);

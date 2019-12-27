@@ -1,13 +1,18 @@
-TODO:
+TODO -> Checkers and Chess (Doggo Edition)
 
-Organize this mess of a code (update comments/doc) + fix bugs
-Alternate turn!
-Better GUI -> how to fullscreen in scale with border for info
-Chess stuff (this seems a bit far-fetch rn but we'll get there!)
+Refining old code:
+Done!		Organize this mess of a code (mostly GUI)
+In progress	Fix current bugs
 
+New stuff to implement:
+Done!		Better GUI -> how to fullscreen in scale with border for info
+Not done	Alternate turn!
+Not done	Chess stuff (this seems a bit far-fetch rn but we'll get there!)
+In Progress	Comments and Documentation
 
-Bugs!
-When jumping over a piece to promote -> fails to promote
-Promoted piece can't capture backwards
-Promoted piece attempting to capture ("jump") turns back into a regular piece
-Probably more big sad :(
+Bugs:
+Not fix		When jumping over a piece to promote -> fail to promote and get stuck
+Not fix		Promoted piece can't capture backwards
+Not fix		Promoted piece attempting to capture ("jump") turns back into a regular piece
+
+Probably more big sad :( -> future bugs will be added below
