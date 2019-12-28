@@ -23,11 +23,14 @@ public class GUIRunnyThingy extends JFrame{
 	
 	//The images used for the pieces and for turn buttons (drawn by Joi Zooo)
 	private String imageDirectory;
-	private ImageIcon frodo, coco, kingFrodo, queenCoco, frodoTurn, cocoTurn;
+	//Checkers (promoted pieces' icons are the same for chess king pieces)
+	private ImageIcon frodo, coco, kingFrodo, queenCoco;//, frodoTurn, cocoTurn;
+	//Chess (k = knight, b = bishop, r = rook, q = queen
+	private ImageIcon kCoco, bCoco, rCoco, qCoco, kFrodo, bFrodo, rFrodo, qFrodo;  
 	
 	//GUI Components Declaration
 	private JPanel mainLayout, boardLayout, leftLayout, rightLayout;
-	private JLabel chooseMode, turnUpdate, liveUpdate, cocoScore, frodoScore;
+	private JLabel chooseMode, turnUpdate, instructions, liveUpdate, cocoScore, frodoScore;
 	private JRadioButton checkersButton, chessButton;
 	private ButtonGroup radialGroup;
 	
@@ -51,46 +54,47 @@ public class GUIRunnyThingy extends JFrame{
 		
 		//Setting and scaling images for all the pieces from the "images" folder
 		imageDirectory = "images\\";
-		if(isCheckers) {
-			//Images for checkers
-			frodo = new ImageIcon(imageDirectory + "Frodo.png");
-			coco = new ImageIcon(imageDirectory + "Coco.png");
-			kingFrodo = new ImageIcon(imageDirectory + "KingFrodo.png");
-			queenCoco = new ImageIcon(imageDirectory + "QueenCoco.png");
-			frodoTurn = new ImageIcon(imageDirectory + "DownArrow.png");		
-			cocoTurn = new ImageIcon(imageDirectory + "UpArrow.png");
-			
-			//Scaling the images to each square size of the the board
-			frodo = new ImageIcon(scaleImage(frodo.getImage()));
-			coco = new ImageIcon(scaleImage(coco.getImage()));
-			kingFrodo = new ImageIcon(scaleImage(kingFrodo.getImage()));
-			queenCoco = new ImageIcon(scaleImage(queenCoco.getImage()));
-			frodoTurn = new ImageIcon(scaleImage(frodoTurn.getImage()));
-			cocoTurn = new ImageIcon(scaleImage(cocoTurn.getImage()));
-			
-			//Count of how many pieces are left on the board
-			cocoCount = 12;
-			frodoCount = 12;
-		} else {
-			//Images for chess
-			
-		}
+		
+		//Images for checkers
+		frodo = new ImageIcon(imageDirectory + "Frodo.png");
+		coco = new ImageIcon(imageDirectory + "Coco.png");
+		kingFrodo = new ImageIcon(imageDirectory + "KingFrodo.png");
+		queenCoco = new ImageIcon(imageDirectory + "QueenCoco.png");
+//		frodoTurn = new ImageIcon(imageDirectory + "DownArrow.png");		
+//		cocoTurn = new ImageIcon(imageDirectory + "UpArrow.png");
+		
+		//Scaling the images to each square size of the the board
+		frodo = new ImageIcon(scaleImage(frodo.getImage()));
+		coco = new ImageIcon(scaleImage(coco.getImage()));
+		kingFrodo = new ImageIcon(scaleImage(kingFrodo.getImage()));
+		queenCoco = new ImageIcon(scaleImage(queenCoco.getImage()));
+//		frodoTurn = new ImageIcon(scaleImage(frodoTurn.getImage()));
+//		cocoTurn = new ImageIcon(scaleImage(cocoTurn.getImage()));
+		
+		//Count of how many checkers pieces are left on the board
+		cocoCount = 12;
+		frodoCount = 12;
+		
+		//Images for chess
+		
 		
 		//GUI Component Initialization
-		mainLayout = new JPanel(new BorderLayout());
+		mainLayout  = new JPanel(new BorderLayout());
 		boardLayout = new JPanel(new GridLayout(8, 8, 1, 1));	//8x8 grid with 1 pixel of spacing
-		leftLayout = new JPanel(new GridLayout(0, 1));
+		leftLayout  = new JPanel(new GridLayout(0, 1));
 		rightLayout = new JPanel(new GridLayout(0, 1));
 		
-		chooseMode = new JLabel("Checkers or Chess?");
-		turnUpdate = new JLabel("Frodo Turn", frodo, JLabel.LEFT);
-		liveUpdate = new JLabel("Checkers woof! Frodo moves first", JLabel.CENTER);
-		cocoScore = new JLabel("Coco: " + cocoCount, queenCoco, JLabel.CENTER);
-		frodoScore = new JLabel("Frodo: " + frodoCount, kingFrodo, JLabel.CENTER);
+		chooseMode   = new JLabel("Checkers or Chess?");
+		turnUpdate   = new JLabel("Frodo Turn", frodo, JLabel.LEFT);
+		instructions = new JLabel("<html><body> <U>How to move</U>: Select the doggo you want to move <br> "
+				+ "then click where you want to move it! </body></html>", JLabel.RIGHT);
+		liveUpdate   = new JLabel("Checkers woof! Frodo moves first.", JLabel.CENTER);
+		cocoScore    = new JLabel("Coco: " + cocoCount, queenCoco, JLabel.CENTER);
+		frodoScore   = new JLabel("Frodo: " + frodoCount, kingFrodo, JLabel.CENTER);
 		
 		checkersButton = new JRadioButton("Checkers");
-		chessButton = new JRadioButton("Chess");
-		radialGroup = new ButtonGroup();
+		chessButton    = new JRadioButton("Chess");
+		radialGroup    = new ButtonGroup();
 	}
 	
 	/*
@@ -98,7 +102,7 @@ public class GUIRunnyThingy extends JFrame{
 	 */
 	public void addComponentsToPane(Container pane) {
 		//Set the pieces of checkers (default) onto the board
-		setPieces();
+		setPieces(true);
 		
 		//Link the 2 radio buttons together
 		radialGroup.add(checkersButton);
@@ -113,17 +117,24 @@ public class GUIRunnyThingy extends JFrame{
 		//In case the count is offset while playing (for testing) -> secret top right button
 		buttonArr[0][7].getButton().addActionListener(new ResetListener());
 		//For testing until alternating turn is implemented -> toggle turn
-		buttonArr[7][0].getButton().setIcon(frodoTurn);
+//		buttonArr[7][0].getButton().setIcon(frodoTurn);
 //		buttonArr[7][0].getButton().addActionListener(new NextTurnListener());
 		
 		//Left side of the window
+		chooseMode.setFont(new Font("Serif", Font.BOLD, 18));
+		turnUpdate.setFont(new Font("Serif", Font.BOLD, 18));
+		
 		leftLayout.add(chooseMode);
 		leftLayout.add(checkersButton);
 		leftLayout.add(chessButton);
 		leftLayout.add(turnUpdate);
 		
 		//Right side of the window
+		instructions.setFont(new Font("Serif", Font.BOLD, 16));
+		liveUpdate.setFont(new Font("Serif", Font.BOLD, 20));
+		
 		rightLayout.add(cocoScore);
+		rightLayout.add(instructions);
 		rightLayout.add(liveUpdate);
 		rightLayout.add(frodoScore);
 		
@@ -168,9 +179,9 @@ public class GUIRunnyThingy extends JFrame{
 	 * 
 	 * For chess, coming soon!
 	 */
-	public void setPieces() {
-		//Set up for checkers
-		if(isCheckers) {
+	public void setPieces(boolean initilization) {
+		//Default -> checkers
+		if(initilization) {
 			//Loop through all rows and columns
 			for(int r = 0; r < 8; r++) {
 				for(int c = 0; c < 8; c++) {
@@ -203,9 +214,45 @@ public class GUIRunnyThingy extends JFrame{
 					}
 				}
 			}
-		//Set up for chess
 		} else {
-			
+			if(isCheckers) {
+				//Loop through all rows and columns
+				for(int r = 0; r < 8; r++) {
+					for(int c = 0; c < 8; c++) {
+						//Removing existing action listener for checkers
+						if(buttonArr[r][c].getButton().getActionListeners().length == 1)
+							buttonArr[r][c].getButton().removeActionListener(buttonArr[r][c].getButton().getActionListeners()[0]);
+						//Placing the alternating carolina blue squares and determine where to place the doggos (checkers pieces)
+						if(((r+1) % 2 == 0 && (c+1) % 2 == 0) || ((r+1) % 2 == 1 && (c+1) % 2 == 1)) {
+							//Coco -> top 3 rows, Frodo -> bottom 3 rows, empty -> middle 2 rows
+							if(r < 3) {
+								buttonArr[r][c].setDoggo(new Coco(this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(coco);
+							} else if(r > 4){
+								buttonArr[r][c].setDoggo(new Frodo(this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(frodo);
+							}
+						}
+						//Adding action listener to all carolina blue squares
+						if(buttonArr[r][c].getColor().equals(CAROLINA_BLUE)){
+							buttonArr[r][c].getButton().addActionListener(new CheckersMoveListener());
+						}
+					}
+				}
+			//Set up for chess
+			} else {
+				//Loop through all rows and columns
+				for(int r = 0; r < 8; r++) {
+					for(int c = 0; c < 8; c++) {
+						//Removing existing action listener for checkers
+						if(buttonArr[r][c].getButton().getActionListeners().length == 1)
+							buttonArr[r][c].getButton().removeActionListener(buttonArr[r][c].getButton().getActionListeners()[0]);
+						
+						//Adding action listener to all squares
+						buttonArr[r][c].getButton().addActionListener(new ChessMoveListener());
+					}
+				}
+			}
 		}
 	}
 	
@@ -231,7 +278,8 @@ public class GUIRunnyThingy extends JFrame{
 		buttonArr[row][col].getButton().setIcon(null);	//Turn off the image icon
 		//Decrement the count of Coco and Frodo based on checkers or chess
 		if(isCheckers) {
-			if(buttonArr[row][col].getDoggo().getType().equals("Coco") || buttonArr[row][col].getDoggo().getType().equals("Queen")) {
+			if(buttonArr[row][col].getDoggo() != null && (buttonArr[row][col].getDoggo().getType().equals("Coco") || 
+					buttonArr[row][col].getDoggo().getType().equals("Queen"))) {
 				cocoScore.setText("Coco: " + --cocoCount);
 			} else {
 				frodoScore.setText("Frodo: " + --frodoCount);
@@ -242,15 +290,24 @@ public class GUIRunnyThingy extends JFrame{
 		s.setDoggo(null);								//Remove the piece
 	}
 	
+	//Removes all pieces on the board (to switch between checkers and chess)
+	public void removeAllPieces() {
+		for(int r = 0; r < 8; r++) {
+			for(int c = 0; c < 8; c++) {
+				removePiece(buttonArr[r][c]);
+			}
+		}
+	}
+	
 	//
 	private boolean alternatingTurn() {
 		isFrodoTurn = !isFrodoTurn;
 		if(isFrodoTurn) {
-			buttonArr[7][0].getButton().setIcon(frodoTurn);
+//			buttonArr[7][0].getButton().setIcon(frodoTurn);
 			turnUpdate.setText("Frodo Turn");
 			turnUpdate.setIcon(frodo);
 		} else {
-			buttonArr[7][0].getButton().setIcon(cocoTurn);
+//			buttonArr[7][0].getButton().setIcon(cocoTurn);
 			turnUpdate.setText("Coco Turn");
 			turnUpdate.setIcon(coco);
 		}
@@ -274,7 +331,8 @@ public class GUIRunnyThingy extends JFrame{
 						//First click -> save the click location on the board and update the player with text
 						if(clickCount == 1) {
 							from = buttonArr[r][c];
-							liveUpdate.setText(from.getDoggo().getType() + " is selected");
+							if(from.getDoggo() != null)
+								liveUpdate.setText(from.getDoggo().getType() + " is selected");
 						}
 						//Second click
 						if(clickCount == 2) {
@@ -311,6 +369,8 @@ public class GUIRunnyThingy extends JFrame{
 												//After alternatingTurn() is executed -> the turn remains the same
 												isFrodoTurn = !isFrodoTurn;
 											}
+										} else {
+											liveUpdate.setText("Frodo moved");
 										}
 										//Check for promotion to KingFrodo
 										if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 0 &&
@@ -344,6 +404,8 @@ public class GUIRunnyThingy extends JFrame{
 											//After alternatingTurn() is executed -> the turn remains the same
 											isFrodoTurn = !isFrodoTurn;
 										}
+									} else {
+										liveUpdate.setText("Coco moved");
 									}
 									//Checking for promotion to QueenCoco
 									if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 7 &&
@@ -385,6 +447,44 @@ public class GUIRunnyThingy extends JFrame{
 	}
 	
 	/*
+	 * Change the boolean that would rearrange the board depending on what mode the player selected
+	 */
+	private class ChangeModeListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getActionCommand().equals("checkers")) {
+				isCheckers = true;
+				removeAllPieces();
+				setPieces(false);
+				cocoCount = 12;	frodoCount = 12;
+				cocoScore.setText("Coco: " + cocoCount);
+				frodoScore.setText("Coco: " + frodoCount);
+				turnUpdate.setText("Frodo turn");
+				turnUpdate.setIcon(frodo);
+				liveUpdate.setText("Checkers selected! Frodo moves first");
+			} else if(e.getActionCommand().equals("chess")){
+				isCheckers = false;
+				removeAllPieces();
+				setPieces(false);
+				cocoCount = 39;	frodoCount = 39;
+				cocoScore.setText("Coco: " + cocoCount);
+				frodoScore.setText("Coco: " + frodoCount);
+				turnUpdate.setText("Coco turn");
+				turnUpdate.setIcon(coco);
+				liveUpdate.setText("Chess selected! Coco moves first");
+			}
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	private class ChessMoveListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	}
+	
+	/*
 	 * Click count is used to keep track of the pair of clicks. If a misclick occurs and messes up count,
 	 * by pressing the top right button, count will be reset and the game can resume.
 	 */
@@ -414,19 +514,4 @@ public class GUIRunnyThingy extends JFrame{
 //			}
 //		}
 //	}
-	
-	/*
-	 * Change the boolean that would rearrange the board depending on what mode the player selected
-	 */
-	private class ChangeModeListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand().equals("checkers")) {
-				isCheckers = true;
-				liveUpdate.setText("Checkers selected! Frodo moves first");
-			} else if(e.getActionCommand().equals("chess")){
-				//isCheckers = false;
-				liveUpdate.setText("Chess selected! Coco moves first");
-			}
-		}
-	}
 }
