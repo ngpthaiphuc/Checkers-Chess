@@ -13,7 +13,8 @@ public class QueenCoco extends Coco {
 	}
 	
 	//Same as Coco but row to move to can be above or below the initial piece position
-	public boolean move(Square from, Square to){
+	public boolean move(Square to){
+		Square from = board.findSquareWithPos(this.getPosition());
 		if(from.getDoggo() != null && from.getDoggo().getType().equals("Queen") && to.getDoggo() == null && 
 				Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 1 && 
 				Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 1) {
@@ -32,9 +33,11 @@ public class QueenCoco extends Coco {
 	}
 	
 	//Same as Coco but can jump in either direction
-	public boolean jump(Square from, Square to) {
-		Position startPos = from.getPosition();
+	public boolean jump(Square to) {
+		Position startPos = this.getPosition();
+		Square from = board.findSquareWithPos(startPos);
 		Position jumpPos = to.getPosition();
+		
 		//The square being jumped over
 		Square middle = board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow()) /2,
 				(startPos.getColumn() + jumpPos.getColumn()) /2));
@@ -55,6 +58,26 @@ public class QueenCoco extends Coco {
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
+			return true;
+		}
+		return false;
+	}
+	
+	//Checking if QueenCoco has any possible jump (for alternating turn)
+	public boolean canJump(Square to) {
+		Position startPos = this.getPosition();
+		Square from = board.findSquareWithPos(startPos);
+		
+		Position jumpPos = to.getPosition();
+		
+		//The square being jumped over
+		Square middle = board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow()) /2,
+				(startPos.getColumn() + jumpPos.getColumn()) /2));
+		
+		if(from.getDoggo() != null && to.getDoggo() == null && from.getDoggo().getType().equals("Queen") &&
+				Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 2 && 
+				Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 2 &&
+				(middle.getDoggo().getType().equals("Frodo") || (middle.getDoggo().getType().equals("King")))){
 			return true;
 		}
 		return false;

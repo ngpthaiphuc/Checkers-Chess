@@ -6,7 +6,8 @@ Done!		Fix current bugs (bug from old code)
 
 New stuff to implement:
 Done!		Better GUI -> how to fullscreen in scale with border for info
-In Progress	Alternate turn!
+In Progress	Alternate turn! -> everything is good except for consecutive jumps for the promoted pieces
+Not done	(Optional) Maybe limit and make sure a player have to jump if it is possible?
 Not done	Chess stuff (this seems a bit far-fetch rn but we'll get there!)
 In Progress	Comments and Documentation
 
@@ -17,7 +18,10 @@ From old code
 Fixed!		An opponent piece can jump out of turn
 Fixed!		When jumping over a piece to promote -> fail to promote and get stuck
 Fixed!		Promoted piece can't capture backwards
-Fixed!		Promoted piece attempting to capture ("jump") turns back into a regular piece
+Fixed!		Promoted piece attempting to capture/jump turns back into a regular piece
 Fixed!		Frodo at the bottom-most row can't capture/jump
 
 From new code
+Fixed!		Doggos (Pieces) can't move nor jump to the top-most and bottom-most rows (promotion rows)
+Fixed!		Fake promotion by clicking the promotion rows (piece is promoted but can't move)
+Fixed!		Promotion pieces doesn't change their imageIcon and couldn't move backwards

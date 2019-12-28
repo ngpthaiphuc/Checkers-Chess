@@ -12,8 +12,11 @@ public class KingFrodo extends Frodo {
 		return "King";
 	}
 	
-	//Same as Frodo but row to move to can be above or below the initial piece position
-	public boolean move(Square from, Square to){
+	//Same as Frodo but can move diagonally 1 square up or down
+	public boolean move(Square to){
+		//Getting the square this piece is currently on
+		Square from = board.findSquareWithPos(this.getPosition());
+		//Checking to see if KingFrodo can move to the square indicated
 		if(from.getDoggo() != null && to.getDoggo() == null && from.getDoggo().getType().equals("King") &&
 				Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 1 && 
 				Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 1) {
@@ -32,9 +35,11 @@ public class KingFrodo extends Frodo {
 	}
 	
 	//Same as Frodo but can jump in either direction
-	public boolean jump(Square from, Square to) {
-		Position startPos = from.getPosition();
+	public boolean jump(Square to) {
+		Position startPos = this.getPosition();
+		Square from = board.findSquareWithPos(startPos);
 		Position jumpPos = to.getPosition();
+		
 		//The square being jumped over
 		Square middle = board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow()) /2,
 				(startPos.getColumn() + jumpPos.getColumn()) /2));
@@ -55,8 +60,24 @@ public class KingFrodo extends Frodo {
 			int fromRow = from.getPosition().getRow();
 			int fromCol = from.getPosition().getColumn();
 			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
-//			board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow())/2, (startPos.getColumn() + jumpPos.getColumn())/2)).getButton().setIcon(null);
-//			board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow())/2, (startPos.getColumn() + jumpPos.getColumn())/2)).setDoggo(null);
+			return true;
+		}
+		return false;
+	}
+	
+	//Checking if KingFrodo has any possible jump (for alternating turn)
+	public boolean canJump(Square to) {
+		Position startPos = this.getPosition();
+		Square from = board.findSquareWithPos(startPos);
+		Position jumpPos = to.getPosition();
+		//The square being jumped over
+		Square middle = board.findSquareWithPos(new Position((startPos.getRow() + jumpPos.getRow()) /2,
+				(startPos.getColumn() + jumpPos.getColumn()) /2));
+		
+		if(from.getDoggo() != null && to.getDoggo() == null && from.getDoggo().getType().equals("King") &&
+				Math.abs(from.getPosition().getRow() - to.getPosition().getRow()) == 2 && 
+				Math.abs(from.getPosition().getColumn() - to.getPosition().getColumn()) == 2 &&
+				(middle.getDoggo().getType().equals("Coco") || (middle.getDoggo().getType().equals("Queen")))){
 			return true;
 		}
 		return false;

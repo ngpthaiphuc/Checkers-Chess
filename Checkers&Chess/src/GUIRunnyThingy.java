@@ -16,10 +16,9 @@ public class GUIRunnyThingy extends JFrame{
 	private boolean isCheckers;
 	private static int HEIGHT, WIDTH;
 	private static Color CAROLINA_BLUE, BLACK;
-	
-	private int clickCount, cocoCount, frodoCount;
 	//A temporary variable Square that is used to store the first square clicked (the piece that is going to be moved)
 	private Square from;
+	private int clickCount, cocoCount, frodoCount;
 	private boolean isFrodoTurn;
 	
 	//The images used for the pieces and for turn buttons (drawn by Joi Zooo)
@@ -115,7 +114,7 @@ public class GUIRunnyThingy extends JFrame{
 		buttonArr[0][7].getButton().addActionListener(new ResetListener());
 		//For testing until alternating turn is implemented -> toggle turn
 		buttonArr[7][0].getButton().setIcon(frodoTurn);
-		buttonArr[7][0].getButton().addActionListener(new NextTurnListener());
+//		buttonArr[7][0].getButton().addActionListener(new NextTurnListener());
 		
 		//Left side of the window
 		leftLayout.add(chooseMode);
@@ -240,7 +239,22 @@ public class GUIRunnyThingy extends JFrame{
 		} else {
 			
 		}
-		s.setDoggo(null);								//Delete the piece
+		s.setDoggo(null);								//Remove the piece
+	}
+	
+	//
+	private boolean alternatingTurn() {
+		isFrodoTurn = !isFrodoTurn;
+		if(isFrodoTurn) {
+			buttonArr[7][0].getButton().setIcon(frodoTurn);
+			turnUpdate.setText("Frodo Turn");
+			turnUpdate.setIcon(frodo);
+		} else {
+			buttonArr[7][0].getButton().setIcon(cocoTurn);
+			turnUpdate.setText("Coco Turn");
+			turnUpdate.setIcon(coco);
+		}
+		return isFrodoTurn;
 	}
 	
 	/*
@@ -264,48 +278,94 @@ public class GUIRunnyThingy extends JFrame{
 						}
 						//Second click
 						if(clickCount == 2) {
-							//If the square that was clicked on has a doggo (piece)
+							//Checking if the square clicked on is a doggo (piece)
 							if(from.getDoggo() != null) {
 								//Promotion to queen or king
-								if(buttonArr[r][c].getPosition().getRow() == 7 && from.getDoggo().getType().equals("Coco")) {
-									//queenCoco
-									from.setDoggo(new QueenCoco(from.getDoggo().getBoard(), new Position(r, c)));
-									liveUpdate.setText("Bark! Coco promoted to Queen Coco!");
-								} else if(buttonArr[r][c].getPosition().getRow() == 0 && from.getDoggo().getType().equals("Frodo")) {
-									//kingFrodo
-									from.setDoggo(new KingFrodo(from.getDoggo().getBoard(), new Position(r, c)));
-									liveUpdate.setText("Yip! Frodo promoted to King Frodo!");
-								}
-								//On frodo turn -> if first square selected was a frodo -> move
+//								if(buttonArr[r][c].getPosition().getRow() == 7 && from.getDoggo().getType().equals("Coco")) {
+//									//queenCoco
+//									from.setDoggo(new QueenCoco(from.getDoggo().getBoard(), new Position(r, c)));
+//									liveUpdate.setText("Bark! Coco promoted to Queen Coco!");
+//								} else if(buttonArr[r][c].getPosition().getRow() == 0 && from.getDoggo().getType().equals("Frodo")) {
+//									//kingFrodo
+//									from.setDoggo(new KingFrodo(from.getDoggo().getBoard(), new Position(r, c)));
+//									liveUpdate.setText("Yip! Frodo promoted to King Frodo!");
+//								}
+								//Checking whose turn it is
 								if(isFrodoTurn) {
 									if(from.getDoggo().getType().equals("Frodo") || (from.getDoggo().getType().equals("King"))) {
-										boolean moved = from.getDoggo().move(from, buttonArr[r][c]);
-//										liveUpdate.setText("Frodo Move: " + moved);
-										//If can't move -> jump
+										boolean moved = from.getDoggo().move(buttonArr[r][c]);
+										boolean jumped = false;
+										//If can't move -> try jump
 										if(!moved) {
-											boolean jump = from.getDoggo().jump(from, buttonArr[r][c]);
-											if(jump)	liveUpdate.setText("Yip! Frodo jumped!");
-											else		liveUpdate.setText("Illegal Move!");
+											jumped = from.getDoggo().jump(buttonArr[r][c]);
+											//If jump successfully -> check for successive jumps
+											if(jumped) {
+												liveUpdate.setText("Yip! Frodo jumped!");
+												if(buttonArr[r][c].getDoggo().canJump()) {
+													isFrodoTurn = !isFrodoTurn;
+													liveUpdate.setText("Yip! Frodo jumped! Jump again!");
+												}
+											}
+											else{
+												liveUpdate.setText("Illegal Move!");
+												//After alternatingTurn() is executed -> the turn remains the same
+												isFrodoTurn = !isFrodoTurn;
+											}
+										}
+										//Check for promotion to KingFrodo
+										if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 0 &&
+												buttonArr[r][c].getDoggo().getType().equals("Frodo")) {
+											buttonArr[r][c].setDoggo(new KingFrodo(buttonArr[r][c].getDoggo().getBoard(),
+													buttonArr[r][c].getPosition()));
+											buttonArr[r][c].getButton().setIcon(buttonArr[r][c].getDoggo().getBoard().getImage("king"));
+											liveUpdate.setText("Yip! Frodo promoted to King Frodo!");
 										}
 									} else {
 										liveUpdate.setText("Moving out of turn!");
+										//After alternatingTurn() is executed -> the turn remains the same
+										isFrodoTurn = !isFrodoTurn;
 									}
 								} else if(from.getDoggo().getType().equals("Coco") || (from.getDoggo().getType().equals("Queen"))){
-									boolean moved = from.getDoggo().move(from, buttonArr[r][c]);
-//									liveUpdate.setText("Coco Move: " + moved);
+									boolean moved = from.getDoggo().move(buttonArr[r][c]);
+									boolean jumped = false;
+									//If can't move -> try jump
 									if(!moved) {
-										boolean jump = from.getDoggo().jump(from, buttonArr[r][c]);
-										if(jump)	liveUpdate.setText("Bark! Coco jumped!");
-										else		liveUpdate.setText("Illegal Move!");
+										jumped = from.getDoggo().jump(buttonArr[r][c]);
+										//If jump successfully -> check for successive jumps
+										if(jumped) {
+											liveUpdate.setText("Bark! Coco jumped!");
+											if(buttonArr[r][c].getDoggo().canJump()) {
+												isFrodoTurn = !isFrodoTurn;
+												liveUpdate.setText("Bark! Coco jumped! Jump again!");
+											}
+										}
+										else{
+											liveUpdate.setText("Illegal Move!");
+											//After alternatingTurn() is executed -> the turn remains the same
+											isFrodoTurn = !isFrodoTurn;
+										}
+									}
+									//Checking for promotion to QueenCoco
+									if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 7 &&
+											buttonArr[r][c].getDoggo().getType().equals("Coco")) {
+										buttonArr[r][c].setDoggo(new QueenCoco(buttonArr[r][c].getDoggo().getBoard(),
+												buttonArr[r][c].getPosition()));
+										buttonArr[r][c].getButton().setIcon(buttonArr[r][c].getDoggo().getBoard().getImage("queen"));
+										liveUpdate.setText("Bark! Coco promoted to Queen Coco!");
 									}
 								} else {
 									liveUpdate.setText("Moving out of turn!");
+									//After alternatingTurn() is executed -> the turn remains the same
+									isFrodoTurn = !isFrodoTurn;
 								}
 							} else {
-								from = null;
 								liveUpdate.setText("No doggo was selected to move");
+								//After alternatingTurn() is executed -> the turn remains the same
+								isFrodoTurn = !isFrodoTurn;
 							}
 							clickCount = 0;
+//							System.out.println(alternatingTurn());
+							alternatingTurn();
 						}
 					}
 				}
@@ -314,10 +374,12 @@ public class GUIRunnyThingy extends JFrame{
 				liveUpdate.setText("Frodo wins! Woof woof!");
 				liveUpdate.setIcon(kingFrodo);
 				cocoScore.setIcon(kingFrodo);
+				turnUpdate.setIcon(kingFrodo);
 			} else if(frodoCount == 0) {
 				liveUpdate.setText("Coco wins! Woof woof!");
 				liveUpdate.setIcon(queenCoco);
 				frodoScore.setIcon(queenCoco);
+				turnUpdate.setIcon(queenCoco);
 			}
 		}
 	}
@@ -336,22 +398,22 @@ public class GUIRunnyThingy extends JFrame{
 	/*
 	 * After a move is made, the player can press the bottom left button to indicate the end of their turn.
 	 * The arrow will point up for Coco's turn and point down for Frodo's turn. The pieces will not be able
-	 * to move/jump if it is not their turn.
+	 * to move/jump if it is not their turn. (for testing)
 	 */
-	private class NextTurnListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			isFrodoTurn = !isFrodoTurn;
-			if(isFrodoTurn) {
-				buttonArr[7][0].getButton().setIcon(frodoTurn);
-				turnUpdate.setText("Frodo Turn");
-				turnUpdate.setIcon(frodo);
-			} else {
-				buttonArr[7][0].getButton().setIcon(cocoTurn);
-				turnUpdate.setText("Coco Turn");
-				turnUpdate.setIcon(coco);
-			}
-		}
-	}
+//	private class NextTurnListener implements ActionListener {
+//		public void actionPerformed(ActionEvent e) {
+//			isFrodoTurn = !isFrodoTurn;
+//			if(isFrodoTurn) {
+//				buttonArr[7][0].getButton().setIcon(frodoTurn);
+//				turnUpdate.setText("Frodo Turn");
+//				turnUpdate.setIcon(frodo);
+//			} else {
+//				buttonArr[7][0].getButton().setIcon(cocoTurn);
+//				turnUpdate.setText("Coco Turn");
+//				turnUpdate.setIcon(coco);
+//			}
+//		}
+//	}
 	
 	/*
 	 * Change the boolean that would rearrange the board depending on what mode the player selected
