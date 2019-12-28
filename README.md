@@ -1,4 +1,4 @@
-#Checkers-and-Chess
+# Checkers-and-Chess
 Checkers and Chess (Doggos Edition)
 
 The concept is checkers and chess with doggos instead of regular game pieces. The code was refined and debugged from an old high school partner project for just checkers with some bugs relating promoting pieces. Additionally, a button was necessary to toggle alternation of turn and the GUI was a 1000 pixels square which is not compatible with different screens and resolutions.
