@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class GUIRunnyThingy extends JFrame{
 	
 	/*
-	 * The 8x8 double array of Square, buttonArr, was used to make a board of buttons. Each square in the double array was
+	 * The 8x8 2D array of Square, buttonArr, was used to make a board of buttons. Each square in the double array was
 	 * initialize with its color alternating in checkers pattern. A piece moves by pressing on the piece then the desire location. 
 	 */
 	private Square[][] buttonArr;

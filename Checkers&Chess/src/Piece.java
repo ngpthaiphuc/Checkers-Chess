@@ -2,8 +2,8 @@ import javax.swing.*;
 
 public abstract class Piece {
 	
-	private ImageIcon doggo;
-	private Position position;
+	private ImageIcon doggo;	//What a piece looks like for the GUI
+	private Position position;	//Current position of a piece on the board
 	
 	public Piece(ImageIcon img, Position p) {
 		doggo = img;

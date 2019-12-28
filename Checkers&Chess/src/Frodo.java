@@ -98,7 +98,7 @@ public class Frodo extends Piece{
 
 	//Checking if Frodo has any possible jump (for alternating turn)
 	public boolean canJump() {
-		//Coco's position and square
+		//Frodo's position and square
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
 		
