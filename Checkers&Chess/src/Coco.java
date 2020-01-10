@@ -13,11 +13,13 @@ public class Coco extends Piece {
 	}
 	
 	//Accessor to determine the type of piece, useful when determining whether jumping is allowed
+	@Override
 	public String getType() {
 		return "Coco";
 	}
 
 	//Accessor to initialize QueenCoco for GUI
+	@Override
 	public GUIRunnyThingy getBoard() {
 		return board;
 	}
@@ -29,6 +31,7 @@ public class Coco extends Piece {
 	 * movement of the piece.
 	 * The method returns a boolean indicating whether or not a move action was successful.
 	 */
+	@Override
 	public boolean move(Square to) {
 		//Getting the square this piece is currently on
 		Square from = board.findSquareWithPos(this.getPosition());
@@ -59,7 +62,8 @@ public class Coco extends Piece {
 	 * This method will be called in the main class if the first clicked square contains a piece of type Coco.
 	 * Two if statements for 2 cases for jumping (to the left and to the right).
 	 */
-	public boolean jump(Square to) {
+	@Override
+	public boolean capture(Square to) {
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
 		Position jumpPos = to.getPosition();
@@ -113,7 +117,8 @@ public class Coco extends Piece {
 	}
 	
 	//Checking if Coco has any possible jump (for alternating turn)
-	public boolean canJump() {
+	@Override
+	public boolean canCapture() {
 		//Coco's position and square
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
@@ -154,6 +159,6 @@ public class Coco extends Piece {
 				(middleL.getDoggo().getType().equals("Frodo") || middleL.getDoggo().getType().equals("King"))) {
 			return true;
 		}
-		return false;
+		return super.canCapture();
 	}
 }

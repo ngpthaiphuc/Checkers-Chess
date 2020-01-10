@@ -25,7 +25,7 @@ public class GUIRunnyThingy extends JFrame{
 	private String imageDirectory;
 	//Checkers (promoted pieces' icons are the same for chess king pieces)
 	private ImageIcon frodo, coco, kingFrodo, queenCoco;//, frodoTurn, cocoTurn;
-	//Chess (k = knight, b = bishop, r = rook, q = queen
+	//Chess (k = knight, b = bishop, r = rook, q = queen)
 	private ImageIcon kCoco, bCoco, rCoco, qCoco, kFrodo, bFrodo, rFrodo, qFrodo;  
 	
 	//GUI Components Declaration
@@ -76,7 +76,26 @@ public class GUIRunnyThingy extends JFrame{
 		frodoCount = 12;
 		
 		//Images for chess
+		kCoco = new ImageIcon(imageDirectory + "CocoKnight.png");
+		bCoco = new ImageIcon(imageDirectory + "CocoBishop.png");
+		rCoco = new ImageIcon(imageDirectory + "CocoRook.png");
+		qCoco = new ImageIcon(imageDirectory + "CocoQueen.png");
 		
+		kFrodo = new ImageIcon(imageDirectory + "FrodoKnight.png");
+		bFrodo = new ImageIcon(imageDirectory + "FrodoBishop.png");
+		rFrodo = new ImageIcon(imageDirectory + "FrodoRook.png");
+		qFrodo = new ImageIcon(imageDirectory + "FrodoQueen.png");
+		
+		//Scaling the images to each square size of the the board
+		kCoco = new ImageIcon(scaleImage(kCoco.getImage()));
+		bCoco = new ImageIcon(scaleImage(bCoco.getImage()));
+		rCoco = new ImageIcon(scaleImage(rCoco.getImage()));
+		qCoco = new ImageIcon(scaleImage(qCoco.getImage()));
+		
+		kFrodo = new ImageIcon(scaleImage(kFrodo.getImage()));
+		bFrodo = new ImageIcon(scaleImage(bFrodo.getImage()));
+		rFrodo = new ImageIcon(scaleImage(rFrodo.getImage()));
+		qFrodo = new ImageIcon(scaleImage(qFrodo.getImage()));
 		
 		//GUI Component Initialization
 		mainLayout  = new JPanel(new BorderLayout());
@@ -173,11 +192,13 @@ public class GUIRunnyThingy extends JFrame{
 	}
 	
 	/*
-	 * The for loop is used to initialized each square in buttonArr to its corresponding piece, position, color, and button icon.
+	 * On initialization, each square/button is initialized to a piece, position, color, and buttonIcon.
 	 * Additionally, it sets the size of all buttons, its background color, and adds actionListener on all carolina blue buttons
-	 * for checkers!
+	 * for checkers (default)
 	 * 
-	 * For chess, coming soon!
+	 * For checkers, pieces are set up on carolina blue squares -> Coco is on the top, Frodo is on the bottom (Frodo moves first)
+	 * 
+	 * For chess, pieces are set up on the top and bottom -> Coco is on the bottom, Frodo is on the top (Coco moves first)
 	 */
 	public void setPieces(boolean initilization) {
 		//Default -> checkers
@@ -215,6 +236,7 @@ public class GUIRunnyThingy extends JFrame{
 				}
 			}
 		} else {
+			//Set up for checkers
 			if(isCheckers) {
 				//Loop through all rows and columns
 				for(int r = 0; r < 8; r++) {
@@ -248,6 +270,60 @@ public class GUIRunnyThingy extends JFrame{
 						if(buttonArr[r][c].getButton().getActionListeners().length == 1)
 							buttonArr[r][c].getButton().removeActionListener(buttonArr[r][c].getButton().getActionListeners()[0]);
 						
+						//Frodo -> top 2 rows, Coco -> bottom 2 rows, empty -> middle 4 rows
+						if(r == 1) {
+							//Frodo's Pawns
+							buttonArr[r][c].setDoggo(new Pawn("frodo", this, buttonArr[r][c].getPosition()));
+							buttonArr[r][c].getButton().setIcon(frodo);
+						} else if(r == 0) {
+							if(c == 0 || c == 7) {
+								//Frodo's Rooks
+								buttonArr[r][c].setDoggo(new Rook("frodo", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(rFrodo);
+							} else if(c == 1 || c == 6) {
+								//Frodo's Knights
+								buttonArr[r][c].setDoggo(new Knight("frodo", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(kFrodo);
+							} else if(c == 2 || c == 5) {
+								//Frodo's Bishops
+								buttonArr[r][c].setDoggo(new Bishop("frodo", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(bFrodo);
+							} else if(c == 3) {
+								//Frodo's Queen
+								buttonArr[r][c].setDoggo(new Queen("frodo", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(qFrodo);
+							} else if(c == 4) {
+								//Frodo's King
+								buttonArr[r][c].setDoggo(new King("king", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(kingFrodo);
+							}
+						} else if(r == 6) {
+							//Coco's Pawns
+							buttonArr[r][c].setDoggo(new Pawn("coco", this, buttonArr[r][c].getPosition()));
+							buttonArr[r][c].getButton().setIcon(coco);
+						} else if(r == 7) {
+							if(c == 0 || c == 7) {
+								//Coco's Rooks
+								buttonArr[r][c].setDoggo(new Rook("coco", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(rCoco);
+							} else if(c == 1 || c == 6) {
+								//Coco's Knights
+								buttonArr[r][c].setDoggo(new Knight("coco", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(kCoco);
+							} else if(c == 2 || c == 5) {
+								//Coco's Bishops
+								buttonArr[r][c].setDoggo(new Bishop("coco", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(bCoco);
+							} else if(c == 3) {
+								//Coco's Queen
+								buttonArr[r][c].setDoggo(new Queen("coco", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(qCoco);
+							} else if(c == 4) {
+								//Coco's King
+								buttonArr[r][c].setDoggo(new King("queen", this, buttonArr[r][c].getPosition()));
+								buttonArr[r][c].getButton().setIcon(queenCoco);
+							}
+						}
 						//Adding action listener to all squares
 						buttonArr[r][c].getButton().addActionListener(new ChessMoveListener());
 					}
@@ -256,9 +332,12 @@ public class GUIRunnyThingy extends JFrame{
 		}
 	}
 	
-	//Accessor of the images of the pieces
+	//Accessor of the images of the pieces (both checkers and chess)
 	public ImageIcon getImage(String piece) {
-		return piece.equals("frodo") ? frodo : piece.equals("coco") ? coco : piece.equals("king") ? kingFrodo : piece.equals("queen") ? queenCoco : null;
+		return piece.equals("frodo") ? frodo : piece.equals("coco") ? coco : piece.equals("king") ? kingFrodo : piece.equals("queen")
+				? queenCoco : piece.equals("cocoKnight") ? kCoco : piece.equals("cocoBishop") ? bCoco : piece.equals("cocoRook") ?
+						rCoco : piece.equals("cocoQueen") ? qCoco : piece.equals("frodoKnight") ? kFrodo : piece.equals("frodoBishop")
+								? bFrodo : piece.equals("frodoRook") ? rFrodo : piece.equals("frodoQueen") ? qFrodo : null;
 	}
 	
 	//Scale the images to the button/square size of the board
@@ -338,16 +417,6 @@ public class GUIRunnyThingy extends JFrame{
 						if(clickCount == 2) {
 							//Checking if the square clicked on is a doggo (piece)
 							if(from.getDoggo() != null) {
-								//Promotion to queen or king
-//								if(buttonArr[r][c].getPosition().getRow() == 7 && from.getDoggo().getType().equals("Coco")) {
-//									//queenCoco
-//									from.setDoggo(new QueenCoco(from.getDoggo().getBoard(), new Position(r, c)));
-//									liveUpdate.setText("Bark! Coco promoted to Queen Coco!");
-//								} else if(buttonArr[r][c].getPosition().getRow() == 0 && from.getDoggo().getType().equals("Frodo")) {
-//									//kingFrodo
-//									from.setDoggo(new KingFrodo(from.getDoggo().getBoard(), new Position(r, c)));
-//									liveUpdate.setText("Yip! Frodo promoted to King Frodo!");
-//								}
 								//Checking whose turn it is
 								if(isFrodoTurn) {
 									if(from.getDoggo().getType().equals("Frodo") || (from.getDoggo().getType().equals("King"))) {
@@ -355,11 +424,11 @@ public class GUIRunnyThingy extends JFrame{
 										boolean jumped = false;
 										//If can't move -> try jump
 										if(!moved) {
-											jumped = from.getDoggo().jump(buttonArr[r][c]);
+											jumped = from.getDoggo().capture(buttonArr[r][c]);
 											//If jump successfully -> check for successive jumps
 											if(jumped) {
 												liveUpdate.setText("Yip! Frodo jumped!");
-												if(buttonArr[r][c].getDoggo().canJump()) {
+												if(buttonArr[r][c].getDoggo().canCapture()) {
 													isFrodoTurn = !isFrodoTurn;
 													liveUpdate.setText("Yip! Frodo jumped! Jump again!");
 												}
@@ -390,11 +459,11 @@ public class GUIRunnyThingy extends JFrame{
 									boolean jumped = false;
 									//If can't move -> try jump
 									if(!moved) {
-										jumped = from.getDoggo().jump(buttonArr[r][c]);
+										jumped = from.getDoggo().capture(buttonArr[r][c]);
 										//If jump successfully -> check for successive jumps
 										if(jumped) {
 											liveUpdate.setText("Bark! Coco jumped!");
-											if(buttonArr[r][c].getDoggo().canJump()) {
+											if(buttonArr[r][c].getDoggo().canCapture()) {
 												isFrodoTurn = !isFrodoTurn;
 												liveUpdate.setText("Bark! Coco jumped! Jump again!");
 											}
@@ -480,7 +549,51 @@ public class GUIRunnyThingy extends JFrame{
 	 */
 	private class ChessMoveListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+			//Looping through every row and column
+			for(int r = 0; r < 8; r++) {
+				for(int c = 0; c < 8; c++) {
+					//If a carolina blue square is click, increment clickCount
+					if((JButton)e.getSource() == buttonArr[r][c].getButton()) {
+						clickCount++;
+						//First click -> save the click location on the board and update the player with text
+						if(clickCount == 1) {
+							from = buttonArr[r][c];
+							if(from.getDoggo() != null)
+								liveUpdate.setText(from.getDoggo().getType() + " is selected");
+						}
+						//Second click
+						if(clickCount == 2) {
+							//Checking if the square clicked on is a doggo (piece)
+							if(from.getDoggo() != null) {
+								//Checking whose turn it is (not implemented yet)
+								boolean moved = from.getDoggo().move(buttonArr[r][c]);
+								boolean captured = false;
+								//If can't move -> try jump
+								if(!moved) {
+									captured = from.getDoggo().capture(buttonArr[r][c]);
+									//If jump successfully -> check for successive jumps
+									if(captured) {
+										liveUpdate.setText("Yip! Frodo captured a piece!");
+									}
+									else{
+										liveUpdate.setText("Illegal Move!");
+										//After alternatingTurn() is executed -> the turn remains the same
+										isFrodoTurn = !isFrodoTurn;
+									}
+								} else {
+									liveUpdate.setText("Frodo moved");
+								}
+							} else {
+								liveUpdate.setText("No doggo was selected to move");
+								//After alternatingTurn() is executed -> the turn remains the same
+								isFrodoTurn = !isFrodoTurn;
+							}
+							clickCount = 0;
+//							System.out.println(alternatingTurn());
+						}
+					}
+				}
+			}
 		}
 	}
 	

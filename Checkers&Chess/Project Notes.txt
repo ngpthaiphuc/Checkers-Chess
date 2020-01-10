@@ -26,9 +26,12 @@ Checkers!
 	Fixed!		Null pointer exception when checking for possible consecutive jumps
 
 Chess!
-	In progress	Set up the chess board and pieces
-	Not done	Pieces (moving and capturing) -> Rook, Bishop, Queen, King, Knight, Pawn (Beginning Move, Promotion, (Optional) En Passant?)
-	Not done	Castling, Checking, Checkmate, Stalemate
+	Done!		Set up the chess board and pieces
+	In Progress	Pieces (moving and capturing) -> Rook, Bishop, Queen, King, Knight, Pawn
+			Done: Rook
+	Not done	Alternating turn
+	Not done	King stuff: Castling, Checking, Checkmate, Stalemate
+	Not done	Pawn stuff: Promotion, (Optional) En Passant?
 
 	Known Bugs:
 	None yet yay!

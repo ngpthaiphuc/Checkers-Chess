@@ -8,11 +8,13 @@ public class KingFrodo extends Frodo {
 	}
 	
 	//Used to determine the type of piece, useful when determining whether jumping is allowed
+	@Override
 	public String getType() {
 		return "King";
 	}
 	
 	//Same as Frodo but can move diagonally 1 square up or down
+	@Override
 	public boolean move(Square to){
 		//Getting the square this piece is currently on
 		Square from = board.findSquareWithPos(this.getPosition());
@@ -35,7 +37,8 @@ public class KingFrodo extends Frodo {
 	}
 	
 	//Same as Frodo but can jump in either direction
-	public boolean jump(Square to) {
+	@Override
+	public boolean capture(Square to) {
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
 		Position jumpPos = to.getPosition();
@@ -66,7 +69,8 @@ public class KingFrodo extends Frodo {
 	}
 	
 	//Checking if KingFrodo has any possible jump (for alternating turn)
-	public boolean canJump() {
+	@Override
+	public boolean canCapture() {
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
 		

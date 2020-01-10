@@ -8,11 +8,13 @@ public class QueenCoco extends Coco {
 	}
 	
 	//Used to determine the type of piece, useful when determining whether jumping is allowed
+	@Override
 	public String getType() {
 		return "Queen";
 	}
 	
 	//Same as Coco but row to move to can be above or below the initial piece position
+	@Override
 	public boolean move(Square to){
 		Square from = board.findSquareWithPos(this.getPosition());
 		if(from.getDoggo() != null && to.getDoggo() == null &&
@@ -33,7 +35,8 @@ public class QueenCoco extends Coco {
 	}
 	
 	//Same as Coco but can jump in either direction
-	public boolean jump(Square to) {
+	@Override
+	public boolean capture(Square to) {
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
 		Position jumpPos = to.getPosition();
@@ -64,7 +67,8 @@ public class QueenCoco extends Coco {
 	}
 	
 	//Checking if QueenCoco has any possible jump (for alternating turn)
-	public boolean canJump() {
+	@Override
+	public boolean canCapture() {
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
 		

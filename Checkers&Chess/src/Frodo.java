@@ -11,16 +11,19 @@ public class Frodo extends Piece{
 	}
 	
 	//Accessor to determine the type of piece, useful when determining whether jumping is allowed
+	@Override
 	public String getType() {
 		return "Frodo";
 	}
 	
 	//Accessor to initialize KingFrodo for GUI
+	@Override
 	public GUIRunnyThingy getBoard() {
 		return board;
 	}
 	
 	//Same as Coco, except moving up
+	@Override
 	public boolean move(Square to) {
 		//Getting the square this piece is currently on
 		Square from = board.findSquareWithPos(this.getPosition());
@@ -43,7 +46,8 @@ public class Frodo extends Piece{
 	}
 	
 	//Same as Coco, except jumping up
-	public boolean jump(Square to) {
+	@Override
+	public boolean capture(Square to) {
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
 		Position jumpPos = to.getPosition();
@@ -97,7 +101,8 @@ public class Frodo extends Piece{
 	}
 
 	//Checking if Frodo has any possible jump (for alternating turn)
-	public boolean canJump() {
+	@Override
+	public boolean canCapture() {
 		//Frodo's position and square
 		Position startPos = this.getPosition();
 		Square from = board.findSquareWithPos(startPos);
@@ -138,6 +143,6 @@ public class Frodo extends Piece{
 				(middleL.getDoggo().getType().equals("Coco") || middleL.getDoggo().getType().equals("Queen"))) {
 			return true;
 		}
-		return false;
+		return super.canCapture();
 	}
 }
