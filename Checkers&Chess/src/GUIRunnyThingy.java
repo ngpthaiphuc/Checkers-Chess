@@ -6,7 +6,8 @@ public class GUIRunnyThingy extends JFrame{
 	
 	/*
 	 * The 8x8 2D array of Square, buttonArr, was used to make a board of buttons. Each square in the double array was
-	 * initialize with its color alternating in checkers pattern. A piece moves by pressing on the piece then the desire location. 
+	 * initialize with its color alternating in checkers pattern. A piece moves by pressing on the piece then the desire location.
+	 * Row increases from top to bottom. Column increases from left to right. (Indexes range from 0 to 7)
 	 */
 	private Square[][] buttonArr;
 	public Square[][] getButtonArr(){
@@ -410,51 +411,22 @@ public class GUIRunnyThingy extends JFrame{
 						//First click -> save the click location on the board and update the player with text
 						if(clickCount == 1) {
 							from = buttonArr[r][c];
-							if(from.getDoggo() != null)
+							//Checks if the square selected has a doggo (piece)
+							if(from.getDoggo() != null) {
 								liveUpdate.setText(from.getDoggo().getType() + " is selected");
+								return;
+							} else {
+								liveUpdate.setText("No doggo was selected to move. Try again!");
+								clickCount = 0;	//Reset Count
+								return;			//Makes sure alternating turn isn't run
+							}
+								
 						}
 						//Second click
-						if(clickCount == 2) {
-							//Checking if the square clicked on is a doggo (piece)
-							if(from.getDoggo() != null) {
-								//Checking whose turn it is
-								if(isFrodoTurn) {
-									if(from.getDoggo().getType().equals("Frodo") || (from.getDoggo().getType().equals("King"))) {
-										boolean moved = from.getDoggo().move(buttonArr[r][c]);
-										boolean jumped = false;
-										//If can't move -> try jump
-										if(!moved) {
-											jumped = from.getDoggo().capture(buttonArr[r][c]);
-											//If jump successfully -> check for successive jumps
-											if(jumped) {
-												liveUpdate.setText("Yip! Frodo jumped!");
-												if(buttonArr[r][c].getDoggo().canCapture()) {
-													isFrodoTurn = !isFrodoTurn;
-													liveUpdate.setText("Yip! Frodo jumped! Jump again!");
-												}
-											}
-											else{
-												liveUpdate.setText("Illegal Move!");
-												//After alternatingTurn() is executed -> the turn remains the same
-												isFrodoTurn = !isFrodoTurn;
-											}
-										} else {
-											liveUpdate.setText("Frodo moved");
-										}
-										//Check for promotion to KingFrodo
-										if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 0 &&
-												buttonArr[r][c].getDoggo().getType().equals("Frodo")) {
-											buttonArr[r][c].setDoggo(new KingFrodo(buttonArr[r][c].getDoggo().getBoard(),
-													buttonArr[r][c].getPosition()));
-											buttonArr[r][c].getButton().setIcon(buttonArr[r][c].getDoggo().getBoard().getImage("king"));
-											liveUpdate.setText("Yip! Frodo promoted to King Frodo!");
-										}
-									} else {
-										liveUpdate.setText("Moving out of turn!");
-										//After alternatingTurn() is executed -> the turn remains the same
-										isFrodoTurn = !isFrodoTurn;
-									}
-								} else if(from.getDoggo().getType().equals("Coco") || (from.getDoggo().getType().equals("Queen"))){
+						else if(clickCount == 2) {
+							//Checking whose turn it is
+							if(isFrodoTurn) {
+								if(from.getDoggo().getType().equals("Frodo") || (from.getDoggo().getType().equals("King"))) {
 									boolean moved = from.getDoggo().move(buttonArr[r][c]);
 									boolean jumped = false;
 									//If can't move -> try jump
@@ -462,42 +434,73 @@ public class GUIRunnyThingy extends JFrame{
 										jumped = from.getDoggo().capture(buttonArr[r][c]);
 										//If jump successfully -> check for successive jumps
 										if(jumped) {
-											liveUpdate.setText("Bark! Coco jumped!");
+											liveUpdate.setText("Yip! Frodo jumped!");
 											if(buttonArr[r][c].getDoggo().canCapture()) {
 												isFrodoTurn = !isFrodoTurn;
-												liveUpdate.setText("Bark! Coco jumped! Jump again!");
+												liveUpdate.setText("Yip! Frodo jumped! Jump again!");
 											}
 										}
 										else{
 											liveUpdate.setText("Illegal Move!");
-											//After alternatingTurn() is executed -> the turn remains the same
-											isFrodoTurn = !isFrodoTurn;
+											clickCount = 0;	//Reset Count
+											return;			//Makes sure alternating turn isn't run
 										}
 									} else {
-										liveUpdate.setText("Coco moved");
+										liveUpdate.setText("Frodo moved");
 									}
-									//Checking for promotion to QueenCoco
-									if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 7 &&
-											buttonArr[r][c].getDoggo().getType().equals("Coco")) {
-										buttonArr[r][c].setDoggo(new QueenCoco(buttonArr[r][c].getDoggo().getBoard(),
+									//Check for promotion to KingFrodo
+									if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 0 &&
+											buttonArr[r][c].getDoggo().getType().equals("Frodo")) {
+										buttonArr[r][c].setDoggo(new KingFrodo(buttonArr[r][c].getDoggo().getBoard(),
 												buttonArr[r][c].getPosition()));
-										buttonArr[r][c].getButton().setIcon(buttonArr[r][c].getDoggo().getBoard().getImage("queen"));
-										liveUpdate.setText("Bark! Coco promoted to Queen Coco!");
+										buttonArr[r][c].getButton().setIcon(buttonArr[r][c].getDoggo().getBoard().getImage("king"));
+										liveUpdate.setText("Yip! Frodo promoted to King Frodo!");
 									}
 								} else {
 									liveUpdate.setText("Moving out of turn!");
-									//After alternatingTurn() is executed -> the turn remains the same
-									isFrodoTurn = !isFrodoTurn;
+									clickCount = 0;	//Reset Count
+									return;			//Makes sure alternating turn isn't run
+								}
+							} else if(from.getDoggo().getType().equals("Coco") || (from.getDoggo().getType().equals("Queen"))){
+								boolean moved = from.getDoggo().move(buttonArr[r][c]);
+								boolean jumped = false;
+								//If can't move -> try jump
+								if(!moved) {
+									jumped = from.getDoggo().capture(buttonArr[r][c]);
+									//If jump successfully -> check for successive jumps
+									if(jumped) {
+										liveUpdate.setText("Bark! Coco jumped!");
+										if(buttonArr[r][c].getDoggo().canCapture()) {
+											isFrodoTurn = !isFrodoTurn;
+											liveUpdate.setText("Bark! Coco jumped! Jump again!");
+										}
+									}
+									else{
+										liveUpdate.setText("Illegal Move!");
+										clickCount = 0;	//Reset Count
+										return;			//Makes sure alternating turn isn't run
+									}
+								} else {
+									liveUpdate.setText("Coco moved");
+								}
+								//Checking for promotion to QueenCoco
+								if((moved || jumped) && buttonArr[r][c].getPosition().getRow() == 7 &&
+										buttonArr[r][c].getDoggo().getType().equals("Coco")) {
+									buttonArr[r][c].setDoggo(new QueenCoco(buttonArr[r][c].getDoggo().getBoard(),
+											buttonArr[r][c].getPosition()));
+									buttonArr[r][c].getButton().setIcon(buttonArr[r][c].getDoggo().getBoard().getImage("queen"));
+									liveUpdate.setText("Bark! Coco promoted to Queen Coco!");
 								}
 							} else {
-								liveUpdate.setText("No doggo was selected to move");
-								//After alternatingTurn() is executed -> the turn remains the same
-								isFrodoTurn = !isFrodoTurn;
+								liveUpdate.setText("Moving out of turn!");
+								clickCount = 0;	//Reset Count
+								return;			//Makes sure alternating turn isn't run
 							}
-							clickCount = 0;
-//							System.out.println(alternatingTurn());
-							alternatingTurn();
 						}
+						//Always execute unless "return;"
+						clickCount = 0;		//Reset Count
+						alternatingTurn();	//Alternate turn between Frodo and Coco
+						
 					}
 				}
 			}
@@ -552,17 +555,24 @@ public class GUIRunnyThingy extends JFrame{
 			//Looping through every row and column
 			for(int r = 0; r < 8; r++) {
 				for(int c = 0; c < 8; c++) {
-					//If a carolina blue square is click, increment clickCount
+					//If a square is click, increment clickCount
 					if((JButton)e.getSource() == buttonArr[r][c].getButton()) {
 						clickCount++;
 						//First click -> save the click location on the board and update the player with text
 						if(clickCount == 1) {
 							from = buttonArr[r][c];
-							if(from.getDoggo() != null)
+							//Checks if the square selected has a doggo (piece)
+							if(from.getDoggo() != null) {
 								liveUpdate.setText(from.getDoggo().getType() + " is selected");
+								return;
+							} else {
+								liveUpdate.setText("No doggo was selected to move. Try again!");
+								clickCount = 0;	//Reset Count
+								return;			//Makes sure alternating turn isn't run
+							}
 						}
 						//Second click
-						if(clickCount == 2) {
+						else if(clickCount == 2) {
 							//Checking if the square clicked on is a doggo (piece)
 							if(from.getDoggo() != null) {
 								//Checking whose turn it is (not implemented yet)
@@ -573,24 +583,24 @@ public class GUIRunnyThingy extends JFrame{
 									captured = from.getDoggo().capture(buttonArr[r][c]);
 									//If jump successfully -> check for successive jumps
 									if(captured) {
-										liveUpdate.setText("Yip! Frodo captured a piece!");
-									}
-									else{
+										liveUpdate.setText("Yip! Doggo captured a piece!");
+									} else {
 										liveUpdate.setText("Illegal Move!");
-										//After alternatingTurn() is executed -> the turn remains the same
-										isFrodoTurn = !isFrodoTurn;
+										clickCount = 0;	//Reset Count
+										return;			//Makes sure alternating turn isn't run
 									}
 								} else {
-									liveUpdate.setText("Frodo moved");
+									liveUpdate.setText("Doggo moved");
 								}
 							} else {
 								liveUpdate.setText("No doggo was selected to move");
-								//After alternatingTurn() is executed -> the turn remains the same
-								isFrodoTurn = !isFrodoTurn;
+								clickCount = 0;	//Reset Count
+								return;			//Makes sure alternating turn isn't run
 							}
-							clickCount = 0;
-//							System.out.println(alternatingTurn());
 						}
+						//Always execute unless "return;"
+						clickCount = 0;	//Reset Count
+//						System.out.println(alternatingTurn());
 					}
 				}
 			}

@@ -159,6 +159,6 @@ public class Coco extends Piece {
 				(middleL.getDoggo().getType().equals("Frodo") || middleL.getDoggo().getType().equals("King"))) {
 			return true;
 		}
-		return super.canCapture();
+		return super.canCapture();	//false
 	}
 }

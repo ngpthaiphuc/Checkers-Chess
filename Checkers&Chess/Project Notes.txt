@@ -24,17 +24,18 @@ Checkers!
 	Fixed!		Fake promotion by clicking the promotion rows (piece is promoted but can't move)
 	Fixed!		Promotion pieces doesn't change their imageIcon and couldn't move backwards
 	Fixed!		Null pointer exception when checking for possible consecutive jumps
+	Fixed!		The turn alternates if the same piece is clicked 3 times
 
 Chess!
 	Done!		Set up the chess board and pieces
 	In Progress	Pieces (moving and capturing) -> Rook, Bishop, Queen, King, Knight, Pawn
-			Done: Rook
+				Done: Rook, Pawn (not promotion), Bishop
 	Not done	Alternating turn
 	Not done	King stuff: Castling, Checking, Checkmate, Stalemate
 	Not done	Pawn stuff: Promotion, (Optional) En Passant?
 
 	Known Bugs:
-	None yet yay!
+
 
 
 Far future goal!! -> Maybe Computer AI?

@@ -23,50 +23,47 @@ public class Rook extends Piece {
 		return board;
 	}
 	
-	//Checks to see if the path of the rook is blocked (horizontal and vertical)
+	//Checks to see if the path of the rook is blocked, exclusive of the square it is moving to (horizontal and vertical)
 	@Override
 	public boolean isBlocked(Square to) {
 		Square from = board.findSquareWithPos(this.getPosition());
+		//Horizontal movement
 		if(to.getPosition().getRow() == from.getPosition().getRow()) {
 			if(to.getPosition().getColumn() > from.getPosition().getColumn()) {
-				for(int i = from.getPosition().getColumn() + 1; i < to.getPosition().getColumn(); i++) {
-					if(board.findSquareWithPos(new Position(from.getPosition().getRow(), i)).getDoggo() != null) {
+				for(int i = from.getPosition().getColumn() +1; i < to.getPosition().getColumn(); i++) {
+					if(board.findSquareWithPos(new Position(from.getPosition().getRow(), i)).getDoggo() != null)
 						return true;
-					}
 				}
 			} else if(to.getPosition().getColumn() < from.getPosition().getColumn()) {
-				for(int i = to.getPosition().getColumn() + 1; i < from.getPosition().getColumn(); i++) {
-					if(board.findSquareWithPos(new Position(from.getPosition().getRow(), i)).getDoggo() != null) {
+				for(int i = to.getPosition().getColumn() +1; i < from.getPosition().getColumn(); i++) {
+					if(board.findSquareWithPos(new Position(from.getPosition().getRow(), i)).getDoggo() != null)
 						return true;
-					}
 				}
 			}
 			return false;
+		//Vertical movement
 		} else if(to.getPosition().getColumn() == from.getPosition().getColumn()) {
 			if(to.getPosition().getRow() > from.getPosition().getRow()) {
-				for(int i = from.getPosition().getRow() + 1; i < to.getPosition().getRow(); i++) {
-					if(board.findSquareWithPos(new Position(i, from.getPosition().getColumn())).getDoggo() != null) {
+				for(int i = from.getPosition().getRow() +1; i < to.getPosition().getRow(); i++) {
+					if(board.findSquareWithPos(new Position(i, from.getPosition().getColumn())).getDoggo() != null)
 						return true;
-					}
 				}
 			} else if(to.getPosition().getRow() < from.getPosition().getRow()) {
-				for(int i = to.getPosition().getRow() + 1; i < from.getPosition().getRow(); i++) {
-					if(board.findSquareWithPos(new Position(i, from.getPosition().getColumn())).getDoggo() != null) {
+				for(int i = to.getPosition().getRow() +1; i < from.getPosition().getRow(); i++) {
+					if(board.findSquareWithPos(new Position(i, from.getPosition().getColumn())).getDoggo() != null)
 						return true;
-					}
 				}
 			}
 			return false;
 		}
-		return super.isBlocked(to);
+		return super.isBlocked(to);	//true
 	}
 
 	//Rook can move horizontally or vertically infinitely as long as there are nothing blocking its path.
 	@Override
 	public boolean move(Square to) {
 		Square from = board.findSquareWithPos(this.getPosition());
-		if(from.getDoggo() != null && to.getDoggo() == null && (to.getPosition().getRow() == from.getPosition().getRow()
-				|| to.getPosition().getColumn() == from.getPosition().getColumn()) && !isBlocked(to)) {
+		if(to.getDoggo() == null && !isBlocked(to)) {
 			//Moves the rook to the given square
 			this.setPosition(to.getPosition());
 			to.setDoggo(from.getDoggo());
@@ -87,9 +84,7 @@ public class Rook extends Piece {
 	public boolean capture(Square to) {
 		Square from = board.findSquareWithPos(this.getPosition());
 		if(doggo.equals("coco")) {
-			if(from.getDoggo() != null && to.getDoggo() != null && (to.getDoggo().getType().contains("frodo") || to.getDoggo().getType().equals("king")) &&
-					(to.getPosition().getRow() == from.getPosition().getRow() || to.getPosition().getColumn() == from.getPosition().getColumn())
-					&& !isBlocked(to)) {
+			if(to.getDoggo() != null && (to.getDoggo().getType().contains("frodo") || to.getDoggo().getType().equals("king")) && !isBlocked(to)) {
 				//Removes the piece being captured
 				board.removePiece(to);
 				//Moves the rook to the given square
@@ -105,9 +100,7 @@ public class Rook extends Piece {
 				return true;
 			}
 		} else if(doggo.equals("frodo")) {
-			if(from.getDoggo() != null && to.getDoggo() != null && (to.getDoggo().getType().contains("coco") || to.getDoggo().getType().equals("queen")) &&
-					(to.getPosition().getRow() == from.getPosition().getRow() || to.getPosition().getColumn() == from.getPosition().getColumn())
-					&& !isBlocked(to)) {
+			if(to.getDoggo() != null && (to.getDoggo().getType().contains("coco") || to.getDoggo().getType().equals("queen")) && !isBlocked(to)) {
 				//Removes the piece being captured
 				board.removePiece(to);
 				//Moves the rook to the given square

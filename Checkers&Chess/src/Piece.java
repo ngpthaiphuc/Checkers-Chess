@@ -14,23 +14,23 @@ public abstract class Piece {
 	 * cannot be written until a piece is actually constructed with a type
 	 * 
 	 * For checkers:
-	 * 		move(Square to)		-> if the piece is able to move to a square (empty, 1 space away diagonally)
-	 * 		capture(Square to)	-> if a piece can jump to square and move + delete piece being jumped over
-	 *  	canCapture()		-> checks if piece is able to jump to any possible squares for alternating turn
+	 * 		move(Square to)		 -> if the piece is able to move to a square (empty, 1 space away diagonally)
+	 * 		capture(Square to)	 -> if a piece can jump to square and move + delete piece being jumped over
+	 *  	canCapture()		 -> checks if piece is able to jump to any possible squares for alternating turn
 	 * 
 	 * For chess:
-	 * 		move(Square to)		-> specific movement based on the piece's type
-	 * 		capture(Square to)	-> specific capture methods based on the piece's type -> move to square and delete piece
-	 * 		canCapture()		-> chess's alternating turn has no exception (consecutive jumps in checkers) so this is not used
+	 * 		move(Square to)		 -> specific movement based on the piece's type
+	 * 		capture(Square to)	 -> specific capture methods based on the piece's type -> move to square and delete piece
+	 * 		isBlocked(Square to) -> checks if piece is blocked by another piece in the middle of its path
 	 */
 	
 	public abstract boolean move(Square to);
 	public abstract boolean capture(Square to);
-	//Only for checkers's alternating turn -> not needed for chess pieces -> not an abstract method
+	//Only for checkers's alternating turn	-> not an abstract method
 	public boolean canCapture() {
 		return false;
 	}
-	//Only for chess -> checks to see if the piece is blocked by another piece in the middle of its path -> not an abstract method
+	//Only for chess pieces' movements		-> not an abstract method
 	public boolean isBlocked(Square to) {
 		return true;
 	}

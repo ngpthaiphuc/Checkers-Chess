@@ -27,42 +27,99 @@ public class Pawn extends Piece {
 	@Override
 	public boolean isBlocked(Square to) {
 		Square from = board.findSquareWithPos(this.getPosition());
-		
+		//Checks if the pawn is moving straight forward (vertically)
 		if(from.getPosition().getColumn() == to.getPosition().getColumn()) {
+			//Coco starts on the bottom (row # increases from top to bottom)
 			if(doggo.equals("coco")) {
-				if(from.getPosition().getRow() != 6 && from.getPosition().getRow() - to.getPosition().getRow() <= 1) {
-					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())) != null) {
+				//Not first move -> checks for a piece right on top of the pawn
+				if(from.getPosition().getRow() != 6 && to.getPosition().getRow() < from.getPosition().getRow() &&
+						from.getPosition().getRow() - to.getPosition().getRow() <= 1) {
+					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())).getDoggo() != null) {
 						return true;
 					}
-				} else if(from.getPosition().getRow() == 6 && from.getPosition().getRow() - to.getPosition().getRow() <= 2) {
-					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())) != null) {
+					return false;
+				//First move! (can move up 2 spaces) -> checks accordingly
+				} else if(from.getPosition().getRow() == 6 && to.getPosition().getRow() < from.getPosition().getRow() &&
+						from.getPosition().getRow() - to.getPosition().getRow() <= 2) {
+					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())).getDoggo() != null ||
+							(from.getPosition().getRow() - to.getPosition().getRow() == 2 &&
+							board.findSquareWithPos(new Position(to.getPosition().getRow() + 1, to.getPosition().getColumn())).getDoggo() != null)) {
 						return true;
 					}
+					return false;
 				}
-				return false;
+			//Frodo starts on the top
 			} else if(doggo.equals("frodo")) {
-				if(from.getPosition().getRow() != 1 && to.getPosition().getRow() - from.getPosition().getRow() <= 1) {
-					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())) != null) {
+				//Not first move -> checks for a piece right underneath the pawn
+				if(from.getPosition().getRow() != 1 && from.getPosition().getRow() < to.getPosition().getRow() &&
+						to.getPosition().getRow() - from.getPosition().getRow() <= 1) {
+					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())).getDoggo() != null) {
 						return true;
 					}
-				} else if(from.getPosition().getRow() == 1 && to.getPosition().getRow() - from.getPosition().getRow() <= 2) {
-					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())) != null) {
+					return false;
+				////First move! (can move down 2 spaces) -> checks accordingly
+				} else if(from.getPosition().getRow() == 1 && from.getPosition().getRow() < to.getPosition().getRow() &&
+						to.getPosition().getRow() - from.getPosition().getRow() <= 2) {
+					if(board.findSquareWithPos(new Position(to.getPosition().getRow(), to.getPosition().getColumn())).getDoggo() != null ||
+							(to.getPosition().getRow() - from.getPosition().getRow() == 2 && 
+							board.findSquareWithPos(new Position(to.getPosition().getRow() - 1, to.getPosition().getColumn())).getDoggo() != null)) {
 						return true;
 					}
+					return false;
 				}
-				return false;
 			}
 		}
-		return super.isBlocked(to);
+		return super.isBlocked(to);	//true
 	}
 	
+	//Pawn can move forward (vertically) one space per turn, except for the very first move, it can move forward 2 spaces.
 	@Override
 	public boolean move(Square to) {
 		Square from = board.findSquareWithPos(this.getPosition());
-		
-		if(from.getDoggo() != null && to.getDoggo() == null && to.getPosition().getColumn() == from.getPosition().getColumn() && !isBlocked(to)) {
-			if((from.getPosition().getRow() != 6 && from.getPosition().getRow() - to.getPosition().getRow() <= 1) || 
-					(from.getPosition().getRow() == 6 && from.getPosition().getRow() - to.getPosition().getRow() <= 2)) {
+		if(!isBlocked(to)) {
+			//Moves the pawn to the given square
+			this.setPosition(to.getPosition());
+			to.setDoggo(from.getDoggo());
+			from.setDoggo(null);
+			int toRow = to.getPosition().getRow();
+			int toCol = to.getPosition().getColumn();
+			board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage(doggo));
+			int fromRow = from.getPosition().getRow();
+			int fromCol = from.getPosition().getColumn();
+			board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
+			return true;
+		}
+		return false;
+	}
+
+	//Pawn can capture diagonally one space -> cannot capture in front of it
+	@Override
+	public boolean capture(Square to) {
+		Square from = board.findSquareWithPos(this.getPosition());
+		if(doggo.equals("coco")) {
+			//For coco, checks for diagonal and moving up
+			if(to.getPosition().getRow() == from.getPosition().getRow() -1 && Math.abs(to.getPosition().getColumn() - from.getPosition().getColumn()) == 1 &&
+					to.getDoggo() != null && (to.getDoggo().getType().contains("frodo") || to.getDoggo().getType().equals("king"))) {
+				//Removes the piece being captured
+				board.removePiece(to);
+				//Moves the pawn to the given square
+				this.setPosition(to.getPosition());
+				to.setDoggo(from.getDoggo());
+				from.setDoggo(null);
+				int toRow = to.getPosition().getRow();
+				int toCol = to.getPosition().getColumn();
+				board.getButtonArr()[toRow][toCol].getButton().setIcon(board.getImage(doggo));
+				int fromRow = from.getPosition().getRow();
+				int fromCol = from.getPosition().getColumn();
+				board.getButtonArr()[fromRow][fromCol].getButton().setIcon(null);
+				return true;
+			}
+		} else if(doggo.equals("frodo")) {
+			//For frodo, checks for diagonal and moving down
+			if(to.getPosition().getRow() == from.getPosition().getRow() +1 && Math.abs(to.getPosition().getColumn() - from.getPosition().getColumn()) == 1 &&
+					to.getDoggo() != null && (to.getDoggo().getType().contains("coco") || to.getDoggo().getType().equals("queen"))) {
+				//Removes the piece being captured
+				board.removePiece(to);
 				//Moves the pawn to the given square
 				this.setPosition(to.getPosition());
 				to.setDoggo(from.getDoggo());
@@ -76,12 +133,6 @@ public class Pawn extends Piece {
 				return true;
 			}
 		}
-		return false;
-	}
-
-	@Override
-	public boolean capture(Square to) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

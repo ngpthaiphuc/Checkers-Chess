@@ -19,4 +19,8 @@ public class Position {	//DO NOT KILL HUMAN
 	public int getColumn() {
 		return column;
 	}
+	
+	public String toString() {
+		return "Position: " + row + " x " + column;
+	}
 }

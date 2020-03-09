@@ -143,6 +143,6 @@ public class Frodo extends Piece{
 				(middleL.getDoggo().getType().equals("Coco") || middleL.getDoggo().getType().equals("Queen"))) {
 			return true;
 		}
-		return super.canCapture();
+		return super.canCapture();	//false
 	}
 }
